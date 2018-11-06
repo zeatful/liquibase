@@ -137,7 +137,7 @@ The unique Checksum prevents tampering with liquibase files after they have been
 Additionally, a `CHANGELOGLOCK` table is used to ensure multiple liquibase runs don't occurr concurrently.
 
 ### Database Agnostic Behavior
-Liquibase designed to be database agnostic, which is exactly why the preferred format is to use XML schema tags.  
+Liquibase is designed to be database agnostic, which is exactly why the preferred format is to use XML schema tags.  
 
 Liquibase will convert the XML into raw SQL for the targetted database type.  The default XML tags in the schema facilitate this as well as using a `property`.  A property acts as an alias and can be used for a common operation that is database technology specific. (IE: Dates, MySQL and Oracle use different function calls for this)
 
@@ -185,9 +185,16 @@ Example and how it's used:
     <!-- test, dev, prod is the same as test or dev or prod -->
     <changeSet id="2" author="bob" context="test, dev, prod">
 ```
-
+* Labels - allow you to setup complex logic for which changesets should be run during runtime
+```xml
+```
 * Properties - already mentioned above in *Database Agnostic Behavior*
 
+### Labels vs Contex
+Labels and Contex tags seem very similar, however they have different usecases and behave differently at runtime than one might expect.
+
+* Labels
+* Contexts
 ### Liquibase Tagging
 Liquibase allows tagging of the database so identify a particular state of the database
 
