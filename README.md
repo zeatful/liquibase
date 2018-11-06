@@ -6,7 +6,7 @@
 The purpose of this document is to create useful, organized documentation on usage and behavior of liquibase. It is also to document some general best practices observed by actual users of Liquibase on large projects to produce an all inclusive reference for using Liquibase.
 
 ## Why liquibase?
-Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  It allows things to be done in a databse agnostic way so changes can actually be migrated across different database types, IE: Oracle, Mysql, H2.
+Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
 
 ## <a name="databasesupport"></a>Database Support
 Liquibase supports the following databases:
