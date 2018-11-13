@@ -175,7 +175,7 @@ Each set of changes to the database is generally in a separate changeset so chan
 *IE: 201811051601_687_Adding_ID_To_Table (YYYYMMDDHHMM_STORYNUMBER_SOME_DESCRIPTION)*
 
 ### XML/YAML/JSON to SQL Conversion
-XML, YAML and JSON formats should be preferred as they allow validation mechanizisms to ensure all required fields are provided.  This suffices for most queries, but for more advanced queries or even PL/SQL raw SQL can be used.  Liquibase will convert all XML into actual raw SQL which will be executed against the database.
+XML, YAML and JSON formats should be preferred as they allow validation mechanizisms to ensure all required fields are provided.  In fact most enterprise applications seem to favor the XML format.  This suffices for most queries, but for more advanced queries or even PL/SQL raw SQL can be used.  Liquibase will convert all XML into actual raw SQL which will be executed against the database.
 
 Example with Raw SQL:
 ```xml
@@ -208,7 +208,11 @@ Example with Raw SQL:
 * When a simple query run using an xml tag fails, it will rollback and leave the database in a known state
 
 ### Transaction Commits and Rollbacks
-Liquibase is setup to run each changeset in a transaction so it can rollback to a safe state in the event of a failure.
+Liquibase is designed to run each changeset in a transaction so it can rollback to a safe state in the event of a failure.  However an exception would be any normal database operation that implicitly commits prior transactions.
+Operations Types that would implicitly commit:
+* any drop statement
+* any create statement
+* any alter statement
 
 XML schema tags are preferred due to their ability to easily rollback and automatically create rollback statements for manual rollback invocation.  However this is also to prevent failures which put the database in an indeterminant state.
 
@@ -230,16 +234,18 @@ The above scenario is the exact illustration of why raw SQL should generally be 
 ```
 
 ### Tracking and Checksums
-Liquibase creates a checksum of each file.  This is used for tracking and ensuring files are not changed after a run has occurred.  When a changeset is executed, liquibase stores the changeset id, the file name/path, the checksum, changeset author and other auditing information into a `DATABASECHANGELOG` table.  This is used to determine if a changeset has already run.  On subsequent runs, as long as a change set does not have an attribute `alwaysRun="true" `, then liquibase will not rerun it.  This is how liquibase maintains a ledger of which changes have been run and need to be run.
+Liquibase creates a checksum of each file.  This is used for tracking and ensuring files are not changed after a run has occurred, ensuring consistency across all environments.  When a changeset is executed, liquibase stores the changeset id, the file name/path, the checksum, changeset author and other auditing information into a `DATABASECHANGELOG` table.  This is used to determine if a changeset has already run.  On subsequent runs, as long as a change set does not have an attribute `alwaysRun="true" `, then liquibase will not rerun it.  This is how liquibase maintains a ledger of which changes have been run and need to be run.
 
-The unique Checksum prevents tampering with liquibase files after they have been run and therefore it is essential that a liquibase changeset file NEVER be modified after being run in any managed or customer environment.  Modifying a file locally prior to delivery is fine, but in order to rerun a file, the changelog entry must be deleted to ensure the file reruns.
+The unique Checksum prevents tampering with liquibase files after they have been run and therefore it is essential that a liquibase changeset file NEVER be modified after being run in any managed or customer environment unless absolutely vital.  
+
+Modifying a file locally prior to delivery is fine, but in order to rerun a file, the changelog entry must be deleted to ensure the file reruns.  A rollback can also be invoked if the query provided a rollback or relied on a standard liquibase tag which would successfully generate a rollback.  Otherwise the changelog entry must be deleted and the database manually reverted to the correct state prior to the changeset being run.
 
 Additionally, a `CHANGELOGLOCK` table is used to ensure multiple liquibase runs don't occurr concurrently.
 
 ### Database Agnostic Behavior
-Liquibase is designed to be database agnostic, which is exactly why the preferred format is to use XML schema tags.  
+Liquibase is designed to be database agnostic.  To encourage database agnostic liquibase statements, raw SQL should generally be avoided.  In the event RAW sql must be used, it should be scruitinzed for any statements that are database technology specific.
 
-Liquibase will convert the XML into raw SQL for the targetted database type.  The default XML tags in the schema facilitate this as well as using a `property`.  A property acts as an alias and can be used for a common operation that is database technology specific. (IE: Dates, MySQL and Oracle use different function calls for this)
+Liquibase will convert the XML/YAML/JSON into raw SQL for the targetted database type.  The default liquibase tags in the schema facilitate this as well as using a `property`.  A property acts as an alias and can be used for a common operation that is database technology specific. (IE: Dates, MySQL and Oracle use different system function calls for this)
 
 Example and how it's used:
 ```xml
@@ -269,13 +275,14 @@ Example and how it's used:
     </changeSet>
 ```
 
-* DBMS - allows you to target a changeset to a specific database type, for supported types refer to [Database Support](#databasesupport)
+* dbms - allows you to target a changeset to a specific database type, for supported types refer to [Database Support](#databasesupport)
 
 ```xml
     <changeSet id="2" dbms="oracle" author="efoster">
 ```
 
 * Context - allow you to set a context in which the changeset should run, for instance they can reflect environments, so you could target a changeset to only run locally or in a managed environment
+    * They also allow you to specify logic on the changeset to trigger whether they should be executed during runtime
 
 ```xml
     <changeSet id="2" author="bob" context="test">
@@ -285,8 +292,16 @@ Example and how it's used:
     <!-- test, dev, prod is the same as test or dev or prod -->
     <changeSet id="2" author="bob" context="test, dev, prod">
 ```
-* Labels - allow you to setup complex logic for which changesets should be run during runtime
+* Labels - allow you to specify complex logic at runtime, opposite how contex tags work, to determine which changesets should be executed
+    * CAUTION: logic provided in the actual label attribute will NOT be evaluated as intended as it is for a `context` tag
+
+In liquibase
 ```xml
+    <changeSet id="2" author="joe" label="important">
+```
+
+During runtime
+```shell
 ```
 * Properties - already mentioned above in *Database Agnostic Behavior*
 
