@@ -7,7 +7,11 @@ The purpose of this document is to create useful, organized documentation on usa
 
 ## Table of Contents
 * [Database Support](#databasesupport)
-* [Why Liquibase](#why)
+* [How it works](#works)
+* [How it is stored](#stored)
+* [How it is orchestrated](#orchestrated)
+* [XML/YAML/JSON to SQL Conversion](#sqlconversion)
+* [Why to use liquibase xml schema tags](#xmlschema)
 
 ## <a name="why"></a>Why Liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
@@ -92,8 +96,8 @@ Liquibase supports the following databases:
     </tbody>
 </table>
 
-## How it works
-### How it is stored
+## <a name="works"></a>How it works
+### <a name="stored"></a>How it is stored
 Liquibase represents database operations expressed through various file formats.  Each format is translated to SQL when it runs against the database.  Writing liquibase through an alternative format from SQL gives structure as well as validation which can enforce liquibase best practices by normalizing behavior and ensuring failsafes are provided.
 
 Liquibase Formats:
@@ -104,7 +108,7 @@ Liquibase Formats:
     
 Liquibase files can be checked into source control allowing tracking of changes and also allowing developers to add and receive changes from local environments up to managed environments.
 
-### How it is orchestrated
+### <a name="orchestrated"></a>How it is orchestrated
 Liquibase uses a databasechangelog file to orchestrate which sql should be run in which order, so it runs in a consistent and repeatable state across all environments, from local environments on personal machines up to production servers.  It also removes DBA micromanagement of development changes pertaining to schema structure and data migrations.
 
 A databasechangelog file consists of a master.xml file which can point to individual changeset files or directories(IE: sprint176) of many changeset files.  The folders and files are executed in the order specified by the master.xml.  However, when a folder is specified(with `includeAll`), the files in that folder run alpha-numberically based on their file names and each changeset in the file runs based on it's position in the changeset file.
@@ -178,7 +182,7 @@ Each set of changes to the database is generally in a separate changeset so chan
 
 *IE: 201811051601_687_Adding_ID_To_Table (YYYYMMDDHHMM_STORYNUMBER_SOME_DESCRIPTION)*
 
-### XML/YAML/JSON to SQL Conversion
+### <a name="sqlconversion"></a>XML/YAML/JSON to SQL Conversion
 XML, YAML and JSON formats should be preferred as they allow validation mechanizisms to ensure all required fields are provided.  In fact most enterprise applications seem to favor the XML format.  This suffices for most queries, but for more advanced queries or even PL/SQL raw SQL can be used.  Liquibase will convert all XML into actual raw SQL which will be executed against the database.
 
 Example with Raw SQL:
@@ -204,14 +208,14 @@ Example with Raw SQL:
     </databaseChangeLog>
 ```
 
-#### Why to use liquibase xml schema tags
+#### <a name="xmlschema"></a>Why to use liquibase xml schema tags
 * simple operations have default rollback operations when using xml tags, meaning a rollback operation will perform as expected if manually invoked
 * XML tags provide a schema validation exposing many required fields for a query
 * XML tags are generally cleaner and more consistent
 * XML tags are database agnostic
 * When a simple query run using an xml tag fails, it will rollback and leave the database in a known state
 
-### Transaction Commits and Rollbacks
+### <a name="commits"></a>Transaction Commits and Rollbacks
 Liquibase is designed to run each changeset in a transaction so it can rollback to a safe state in the event of a failure.  However an exception would be any normal database operation that implicitly commits prior transactions.
 Operations Types that would implicitly commit:
 * any drop statement
@@ -237,7 +241,7 @@ The above scenario is the exact illustration of why raw SQL should generally be 
     </changeSet>
 ```
 
-### Tracking and Checksums
+### <a name="tracking"></a>Tracking and Checksums
 Liquibase creates a checksum of each file.  This is used for tracking and ensuring files are not changed after a run has occurred, ensuring consistency across all environments.  When a changeset is executed, liquibase stores the changeset id, the file name/path, the checksum, changeset author and other auditing information into a `DATABASECHANGELOG` table.  This is used to determine if a changeset has already run.  On subsequent runs, as long as a change set does not have an attribute `alwaysRun="true" `, then liquibase will not rerun it.  This is how liquibase maintains a ledger of which changes have been run and need to be run.
 
 The unique Checksum prevents tampering with liquibase files after they have been run and therefore it is essential that a liquibase changeset file NEVER be modified after being run in any managed or customer environment unless absolutely vital.  
@@ -246,7 +250,7 @@ Modifying a file locally prior to delivery is fine, but in order to rerun a file
 
 Additionally, a `CHANGELOGLOCK` table is used to ensure multiple liquibase runs don't occurr concurrently.
 
-### Database Agnostic Behavior
+### <a name="agnostic"></a>Database Agnostic Behavior
 Liquibase is designed to be database agnostic.  To encourage database agnostic liquibase statements, raw SQL should generally be avoided.  In the event RAW sql must be used, it should be scruitinzed for any statements that are database technology specific.
 
 Liquibase will convert the XML/YAML/JSON into raw SQL for the targetted database type.  The default liquibase tags in the schema facilitate this as well as using a `property`.  A property acts as an alias and can be used for a common operation that is database technology specific. (IE: Dates, MySQL and Oracle use different system function calls for this)
@@ -260,7 +264,7 @@ Example and how it's used:
     <column name="Join_date" defaultValueFunction="${now}"/>
 ```
 
-### Advanced Features
+### <a name="features"></a>Advanced Features
 * Preconditions - allow you to conditionally run the changeset based on the current database state:
 ```xml
     <!-- as a precondition to the entire changeset/log file -->
@@ -309,18 +313,18 @@ During runtime
 ```
 * Properties - already mentioned above in *Database Agnostic Behavior*
 
-### Labels vs Context
+### <a name="databasesupport"></a>Labels vs Context
 Labels and Context tags seem very similar, however they have different usecases and behave differently at runtime than one might expect.
 
 * Labels
 * Contexts
-### Liquibase Tagging
+### <a name="databasesupport"></a>Liquibase Tagging
 Liquibase allows tagging of the database so identify a particular state of the database
 
 ```shell
 mvn liquibase:rollback -Dliquibase.rollbackTag=1.0
 ```
-### Liquibase Rollbacks
+### <a name="databasesupport"></a>Liquibase Rollbacks
 The database can be manually rolled back to a point in time if desired using liquibase.  Specifically, rolled back to a certain changeset
 
 ```shell
@@ -332,7 +336,7 @@ The database can be manually rolled back to a point in time if desired using liq
     mvn liquibase:rollbackCount <value> 
 ```
 
-### Liquibase Generating Change Logs (Exporting)
+### <a name="changelog"></a>Liquibase Generating Change Logs (Exporting)
 ```shell
     liquibase --driver=oracle.jdbc.OracleDriver \
         --classpath=\path\to\classes:jdbcdriver.jar \
@@ -343,7 +347,7 @@ The database can be manually rolled back to a point in time if desired using liq
         generateChangeLog
 ```
 
-### Liquibase through Maven
+###<a name="maven"></a> Liquibase through Maven
 Liquibase has a maven plugin which allows liquibase commands to be executed through maven goals and commands.
 
 To get started add the following to your pom.xml and update the information to reflect your configuration
@@ -377,7 +381,7 @@ Example usage to execute liquibase:
 
 The above command can be used to deploy database changes at runtime without any need to restart the application as long as the changes aren't application breaking changes, IE: remove a table referenced or used by Hibernate.
 
-### Liquibase through Spring
+### <a name="spring"></a>Liquibase through Spring
 A liquibase spring bean can also be used to automatically run liquibase at application start thus automating the entire process once an artifact is built and deployed.  This is great for migration to managed environments since it requires no extra steps during the build or deploy.  The liquibase spring bean is also auto configured by spring-boot and will run as long as the bean is defined in the spring project.
 
 To get started simply add liquibase to your dependencies in your pom.xml:
@@ -401,10 +405,10 @@ Then define a spring bean to invoke:
     }
 ```
 
-### Using PLSQL and Raw SQL
+### <a name="sql"></a>Using PLSQL and Raw SQL
 Liquibase supports using raw sql and even plsql.  It is general god practice to avoid a raw SQL statement unless explicitly required to accomplish the task, and in that event it is critical to supply the rollback block mentioned in the *Transaction Commits and Rollbacks* section.
 
-### ChangeSets
+### <a name="changesets"></a>ChangeSets
 Every changeset should have a unique id.  A great starting format is `YYYYMMDDHHMM_STORY#_DESCRIPTION_OF_THE_CHANGE`
 * YYYYMMDDHHMM - ball park date and military time the change was delivered
 * STORY# - general references a story or workitem tied to the change
