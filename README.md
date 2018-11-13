@@ -11,7 +11,7 @@ The purpose of this document is to create useful, organized documentation on usa
     * [How it is stored](#stored)
     * [How it is orchestrated](#orchestrated)
 * [XML/YAML/JSON to SQL Conversion](#sqlconversion)
-* [Why to use liquibase xml schema tags](#xmlschema)
+   * [Why to use liquibase xml schema tags](#xmlschema)
 
 ## <a name="why"></a>Why Liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
