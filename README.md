@@ -281,7 +281,7 @@ Example and how it's used:
     <changeSet id="2" dbms="oracle" author="efoster">
 ```
 
-* Context - allow you to set a context in which the changeset should run, for instance they can reflect environments, so you could target a changeset to only run locally or in a managed environment
+* Contexts - allow you to set a context in which the changeset should run, for instance they can reflect environments, so you could target a changeset to only run locally or in a managed environment
     * They also allow you to specify logic on the changeset to trigger whether they should be executed during runtime
 
 ```xml
@@ -292,8 +292,8 @@ Example and how it's used:
     <!-- test, dev, prod is the same as test or dev or prod -->
     <changeSet id="2" author="bob" context="test, dev, prod">
 ```
-* Labels - allow you to specify complex logic at runtime, opposite how contex tags work, to determine which changesets should be executed
-    * CAUTION: logic provided in the actual label attribute will NOT be evaluated as intended as it is for a `context` tag
+* Labels - allow you to specify complex logic at runtime, opposite how context tags work, to determine which changesets should be executed
+    * CAUTION: logic provided in the actual label attribute will NOT work as it does for a `context` tag
 
 In liquibase
 ```xml
@@ -305,8 +305,8 @@ During runtime
 ```
 * Properties - already mentioned above in *Database Agnostic Behavior*
 
-### Labels vs Contex
-Labels and Contex tags seem very similar, however they have different usecases and behave differently at runtime than one might expect.
+### Labels vs Context
+Labels and Context tags seem very similar, however they have different usecases and behave differently at runtime than one might expect.
 
 * Labels
 * Contexts
