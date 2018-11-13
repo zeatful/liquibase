@@ -3,10 +3,16 @@
 ### This documentation was created from the liquibase source documentation at: https://www.liquibase.org/documentation/
 
 ## Purpose of this document:
-The purpose of this document is to create useful, organized documentation on usage and behavior of liquibase. It is also to document some general best practices observed by actual users of Liquibase on large projects to produce an all inclusive reference for using Liquibase.
+The purpose of this document is to create useful, organized documentation on usage and behavior of liquibase. It is also to document some general best practices generated from real-world usage of Liquibase on large projects to produce an all inclusive reference for using Liquibase.
 
 ## Why liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
+
+| Tables   |      Are      |  Cool |
+|----------|:-------------:|------:|
+| col 1 is |  left-aligned | $1600 |
+| col 2 is |    centered   |   $12 |
+| col 3 is | right-aligned |    $1 |
 
 ## <a name="databasesupport"></a>Database Support
 Liquibase supports the following databases:
