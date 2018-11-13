@@ -8,8 +8,8 @@ The purpose of this document is to create useful, organized documentation on usa
 ## Table of Contents
 * [Database Support](#databasesupport)
 * [How it works](#works)
-* [How it is stored](#stored)
-* [How it is orchestrated](#orchestrated)
+    * [How it is stored](#stored)
+    * [How it is orchestrated](#orchestrated)
 * [XML/YAML/JSON to SQL Conversion](#sqlconversion)
 * [Why to use liquibase xml schema tags](#xmlschema)
 
