@@ -143,7 +143,7 @@ Example changeset file:
             <runningAs username="liquibase"/>
         </preConditions>
 
-        <changeSet id="201811051613_111_creating_person_table" author="efoster">
+        <changeSet id="201811051613_111_creating_person_table" author="zeatful">
             <createTable tableName="person">
                 <column name="id" type="int" autoIncrement="true">
                     <constraints primaryKey="true" nullable="false"/>
@@ -156,12 +156,12 @@ Example changeset file:
             </createTable>
         </changeSet>
 
-        <changeSet id="201811051613_111_add_username_to_person_table" author="efoster">
+        <changeSet id="201811051613_111_add_username_to_person_table" author="zeatful">
             <addColumn tableName="person">
                 <column name="username" type="varchar(8)"/>
             </addColumn>
         </changeSet>
-        <changeSet id="201811051613_111_add_state_lookup_table_to_person" author="efoster">
+        <changeSet id="201811051613_111_add_state_lookup_table_to_person" author="zeatful">
             <addLookupTable
                 existingTableName="person" existingColumnName="state"
                 newTableName="state" newColumnName="id" newColumnDataType="char(2)"/>
@@ -188,7 +188,7 @@ Example with Raw SQL:
             xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
             http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-        <changeSet id="201811131004_111_creating_test1_table" author="efoster">
+        <changeSet id="201811131004_111_creating_test1_table" author="zeatful">
           <sql>
             create table test1 (
                 id int primary key,
@@ -223,7 +223,7 @@ IE:  If you place 5 statements in a single raw SQL block, and one fails in betwe
 The above scenario is the exact illustration of why raw SQL should generally be avoided, however in any event if a correct rollback was provided, it helps prevent leaving the database in a flawed state after a failure of that changeset.
 
 ```xml
-   <changeSet id="changeRollback" author="efoster">
+   <changeSet id="changeRollback" author="zeatful">
         <createTable tableName="changeRollback1">
             <column name="id" type="int"/>
         </createTable>
@@ -266,7 +266,7 @@ Example and how it's used:
     </preConditions>
 
     <!-- as a precondition to the individual changeset -->
-    <changeSet id="1" author="efoster">
+    <changeSet id="1" author="zeatful">
         <preConditions onFail="WARN">
             <sqlCheck expectedResult="0">select count(*) from oldtable</sqlCheck>
         </preConditions>
@@ -278,7 +278,7 @@ Example and how it's used:
 * dbms - allows you to target a changeset to a specific database type, for supported types refer to [Database Support](#databasesupport)
 
 ```xml
-    <changeSet id="2" dbms="oracle" author="efoster">
+    <changeSet id="2" dbms="oracle" author="zeatful">
 ```
 
 * Contexts - allow you to set a context in which the changeset should run, for instance they can reflect environments, so you could target a changeset to only run locally or in a managed environment
@@ -408,7 +408,7 @@ Every changeset should have a unique id.  A great starting format is `YYYYMMDDHH
 
 Every changeset should also contain an author tag, generally with the first initial and last name of the author delivering the change.
 ```shell
-    <changeSet author="efoster" id="201811061514_1_creating_bonus_table">
+    <changeSet author="zeatful" id="201811061514_1_creating_bonus_table">
         <createTable name="BONUS">
             <column name="ENAME" type="VARCHAR2(10,0)"/>
             <column name="JOB" type="VARCHAR2(9,0)"/>
