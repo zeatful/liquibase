@@ -8,14 +8,14 @@ The purpose of this document is to create useful, organized documentation on usa
 ## Why liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
 
-| Tables   |      Are      |  Cool |
-|----------|:-------------:|------:|
-| col 1 is |  left-aligned | $1600 |
-| col 2 is |    centered   |   $12 |
-| col 3 is | right-aligned |    $1 |
-
 ## <a name="databasesupport"></a>Database Support
 Liquibase supports the following databases:
+|  Database  |  Type name |  Notes |
+|------------|:----------:|-------:|
+| MySQL | mysql | No Issues |No Issues
+| PostgreSQL | postgresql | 8.2+ is required to use the "drop all database objects" functionality |
+| Oracle | oracle | 11g driver is required when using the diff tool on databases running with AL32UTF8 or AL16UTF16 |
+
 * MySQL
 * PostgreSQL
 * Oracle
