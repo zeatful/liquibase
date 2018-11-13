@@ -89,9 +89,21 @@ Liquibase supports the following databases:
 </table>
 
 ## How it works
+### How it is stored
+Liquibase represents database operations expressed through various file formats.  Each format is translated to SQL when it runs against the database.  Writing liquibase through an alternative format from SQL gives structure as well as validation which can enforce liquibase best practices by normalizing behavior and ensuring failsafes are provided.
+
+Liquibase Formats:
+    * XML
+    * YAML
+    * JSON
+    * SQL
+    
+Liquibase files can be checked into source control allowing tracking of changes and also allowing developers to add and receive changes from local environments up to managed environments.
+
+### How it is orchestrated
 Liquibase uses a databasechangelog file to orchestrate which sql should be run in which order, so it runs in a consistent and repeatable state across all environments, from local environments on personal machines up to production servers.  It also removes DBA micromanagement of development changes pertaining to schema structure and data migrations.
 
-A databasechangelog file consists of a master.xml file which can point to individual changeset files or directories(IE: sprint176) of many changeset files.  The folders and files are executed in the order specified by the master.xml.  However, when a folder is specified, the files in that folder run alpha-numberically based on their file names and each changeset in the file runs based on it's position in the changeset file.
+A databasechangelog file consists of a master.xml file which can point to individual changeset files or directories(IE: sprint176) of many changeset files.  The folders and files are executed in the order specified by the master.xml.  However, when a folder is specified(with `includeAll`), the files in that folder run alpha-numberically based on their file names and each changeset in the file runs based on it's position in the changeset file.
 
 Example master.xml file:
 
@@ -160,10 +172,33 @@ Example changeset file:
 
 Each set of changes to the database is generally in a separate changeset so changes are organized by their purpose and intent, generally one file or more per story.  Each changeset should have a unique ID and all should follow consistent formats to ensure they always run in the intended order. 
 
-*IE: 20181105_1601_687_Adding_ID_To_Table (YYYYMMDD_HHMM_STORYNUMBER_SOME_DESCRIPTION)*
+*IE: 201811051601_687_Adding_ID_To_Table (YYYYMMDDHHMM_STORYNUMBER_SOME_DESCRIPTION)*
 
-### XML to SQL Conversion
-Liquibase is written in an XML format and is the preferred way to write queries when possible.  This suffices for most queries, but for more advanced queries or even PL/SQL raw SQL can be used.  Liquibase will convert all XML into actual raw SQL which will be executed against the database.
+### XML/YAML/JSON to SQL Conversion
+XML, YAML and JSON formats should be preferred as they allow validation mechanizisms to ensure all required fields are provided.  This suffices for most queries, but for more advanced queries or even PL/SQL raw SQL can be used.  Liquibase will convert all XML into actual raw SQL which will be executed against the database.
+
+Example with Raw SQL:
+```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <databaseChangeLog
+            xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+            xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+        <changeSet id="201811131004_111_creating_test1_table" author="efoster">
+          <sql>
+            create table test1 (
+                id int primary key,
+                name varchar(255)
+            );
+          </sql>
+        </changeSet>
+
+    </databaseChangeLog>
+```
 
 #### Why to use liquibase xml schema tags
 * simple operations have default rollback operations when using xml tags, meaning a rollback operation will perform as expected if manually invoked
