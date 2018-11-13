@@ -93,10 +93,10 @@ Liquibase supports the following databases:
 Liquibase represents database operations expressed through various file formats.  Each format is translated to SQL when it runs against the database.  Writing liquibase through an alternative format from SQL gives structure as well as validation which can enforce liquibase best practices by normalizing behavior and ensuring failsafes are provided.
 
 Liquibase Formats:
-    * XML
-    * YAML
-    * JSON
-    * SQL
+* XML
+* YAML
+* JSON
+* SQL
     
 Liquibase files can be checked into source control allowing tracking of changes and also allowing developers to add and receive changes from local environments up to managed environments.
 
