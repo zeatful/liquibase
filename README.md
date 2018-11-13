@@ -10,25 +10,23 @@ Liquibase operates as an open-source library with tooling to easily orchestrate 
 
 ## <a name="databasesupport"></a>Database Support
 Liquibase supports the following databases:
-|  Database  |  Type name |  Notes                                                                                          |
-|-----------:|:----------:|------------------------------------------------------------------------------------------------:|
-| MySQL      | mysql      | No Issues                                                                                       |
-| PostgreSQL | postgresql | 8.2+ is required to use the "drop all database objects" functionality                           |
-| Oracle     | oracle     | 11g driver is required when using the diff tool on databases running with AL32UTF8 or AL16UTF16 |
 
-* MySQL
-* PostgreSQL
-* Oracle
-* Sql Server
-* Sybase_Enterprise
-* DB2
-* Apache Derby
-* HSQL
-* H2
-* Informix
-* Firebird
-* SQLite
-
+<table>
+<tbody><tr><th>Database</th><th>Type Name</th><th>Notes</th></tr>
+<tr><td>MySQL</td><td>mysql</td><td>No Issues</td></tr>
+<tr><td>PostgreSQL</td><td>postgresql</td><td>8.2+ is required to use the "drop all database objects" functionality.</td></tr>
+<tr><td>Oracle</td><td>oracle</td><td>11g driver is required when using the diff tool on databases running with AL32UTF8 or AL16UTF16</td></tr>
+<tr><td>Sql Server</td><td>mssql</td><td>No Issues</td></tr>
+<tr><td>Sybase_Enterprise</td><td>sybase</td><td>ASE 12.0+ required. "select into" database option needs to be set. Best driver is JTDS. Sybase does not support transactions for DDL so rollbacks will not work on failures. Foreign keys can not be dropped which can break the rollback or dropAll functionality.</td></tr>
+<tr><td>Sybase_Anywhere</td><td>asany</td><td><b>Since 1.9</b></td></tr>
+<tr><td>DB2</td><td>db2</td><td>No Issues. Will auto-call REORG when necessary.</td></tr>
+<tr><td><a href="apache_derby.html">Apache_Derby</a></td><td>derby</td><td>No Issues</td></tr>
+<tr><td>HSQL</td><td>hsqldb</td><td>No Issues</td></tr>
+<tr><td>H2</td><td>h2</td><td>No Issues</td></tr>
+<tr><td><a href="informix.html">Informix</a></td><td>informix</td><td>No Issues</td></tr>
+<tr><td>Firebird</td><td>firebird</td><td>No Issues</td></tr>
+<tr><td><a href="sqlite.html">SQLite</a></td><td>sqlite</td><td>No Issues</td></tr>
+</tbody></table>
 ## How it works
 Liquibase uses a databasechangelog file to orchestrate which sql should be run in which order, so it runs in a consistent and repeatable state across all environments, from local environments on personal machines up to production servers.  It also removes DBA micromanagement of development changes pertaining to schema structure and data migrations.
 
