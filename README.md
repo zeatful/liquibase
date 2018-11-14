@@ -347,6 +347,7 @@ Liquibase allows tagging of the database so identify a particular state of the d
 ```shell
 mvn liquibase:rollback -Dliquibase.rollbackTag=1.0
 ```
+
 ### <a name="rollback"></a>Liquibase Rollbacks
 The database can be manually rolled back to a point in time if desired using liquibase.  Specifically, rolled back to a certain changeset
 
