@@ -336,7 +336,18 @@ Refer to the original liquibase article on the two: [Labels vs Contexts](https:/
    ```xml
       <changeSet id="2" author="bob" label="!test"/>
    ```
-* Contexts - the logic should be added to the actual liquibase tag itself and requires no custom logic to be applied to the command to run liquibase
+   
+   Command during runtime:
+   ```shell
+      mvn liquibase:update -contexts="test,prod"
+   ```
+   Spring bean:
+   ```java
+      liquibase.setContexts("test,prod");
+   ```
+   An advanced usage would be to pull an environment variable at runtime which identified the current environment/server (IE: test, prod, dev, etc...) which would set the context, thus allowing the changeset to only trigger if inteded for that environment
+   
+* Contexts - the logic should be added to the actual liquibase tag itself and requires no custom logic to be applied to the command to run liquibase.  Logic can be provided at runtime through the command or if using the Spring Liquibase bean, can be applied on that object itself.
    * The below example shows how to use this logic
    ```xml
       <changeSet id="2" author="bob" context="!test or prod"/>
