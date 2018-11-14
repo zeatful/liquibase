@@ -12,6 +12,14 @@ The purpose of this document is to create useful, organized documentation on usa
     * [How it is orchestrated](#orchestrated)
 * [XML/YAML/JSON to SQL Conversion](#sqlconversion)
    * [Why to use liquibase xml schema tags](#xmlschema)
+* [Transaction Commits and Rollbacks](#commits)
+* [Database Agnostic Behavior](#agnostic)
+* [Advanced Features](#features)
+   * [Preconditions](#precondition)
+   * [DBMS Tags](#dbms)
+   * [Context](#context)
+   * [Label](#label)
+   * [Properties](#property)
 
 ## <a name="why"></a>Why Liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
@@ -265,7 +273,7 @@ Example and how it's used:
 ```
 
 ### <a name="features"></a>Advanced Features
-* Preconditions - allow you to conditionally run the changeset based on the current database state:
+* <a name="precondition"></a>Preconditions - allow you to conditionally run the changeset based on the current database state:
 ```xml
     <!-- as a precondition to the entire changeset/log file -->
     <preConditions>
@@ -283,13 +291,13 @@ Example and how it's used:
     </changeSet>
 ```
 
-* dbms - allows you to target a changeset to a specific database type, for supported types refer to [Database Support](#databasesupport)
+* <a name="dbms"></a>dbms - allows you to target a changeset to a specific database type, for supported types refer to [Database Support](#databasesupport)
 
 ```xml
     <changeSet id="2" dbms="oracle" author="zeatful">
 ```
 
-* Contexts - allow you to set a context in which the changeset should run, for instance they can reflect environments, so you could target a changeset to only run locally or in a managed environment
+* <a name="context"></a>Contexts - allow you to set a context in which the changeset should run, for instance they can reflect environments, so you could target a changeset to only run locally or in a managed environment
     * They also allow you to specify logic on the changeset to trigger whether they should be executed during runtime
 
 ```xml
@@ -300,7 +308,7 @@ Example and how it's used:
     <!-- test, dev, prod is the same as test or dev or prod -->
     <changeSet id="2" author="bob" context="test, dev, prod">
 ```
-* Labels - allow you to specify complex logic at runtime, opposite how context tags work, to determine which changesets should be executed
+* <a name="label"></a>Labels - allow you to specify complex logic at runtime, opposite how context tags work, to determine which changesets should be executed
     * CAUTION: logic provided in the actual label attribute will NOT work as it does for a `context` tag
 
 In liquibase
@@ -311,7 +319,7 @@ In liquibase
 During runtime
 ```shell
 ```
-* Properties - already mentioned above in *Database Agnostic Behavior*
+* <a name="property"></a>Properties - already mentioned above in *Database Agnostic Behavior*
 
 ### <a name="databasesupport"></a>Labels vs Context
 Labels and Context tags seem very similar, however they have different usecases and behave differently at runtime than one might expect.
