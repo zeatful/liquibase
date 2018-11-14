@@ -20,6 +20,10 @@ The purpose of this document is to create useful, organized documentation on usa
    * [Context](#context)
    * [Label](#label)
    * [Properties](#property)
+* [Labels vs Contexts](#labelsvscontext)
+* [Tagging](#tagging)
+* [Rollbacks](#rollback)
+* [Changelog Generation](#changelog)
 
 ## <a name="why"></a>Why Liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
@@ -322,7 +326,7 @@ During runtime
 ```
 * <a name="property"></a>Properties - already mentioned above in *Database Agnostic Behavior*
 
-### <a name="databasesupport"></a>Labels vs Context
+### <a name="labelsvscontext"></a>Labels vs Context
 Labels and Context tags seem very similar, however they have different usecases and behave differently at runtime than one might expect. The question comes down to who needs the control for the logic, the changeset author or the changeset executor. It is important to note the difference before using either!  It would be advisable to avoid Labels unless explicitly required for the liquibase executor to control the logic.
 
 Refer to the original liquibase article on the two: [Labels vs Contexts](https://www.liquibase.org/2014/11/contexts-vs-labels.html)
@@ -337,13 +341,13 @@ Refer to the original liquibase article on the two: [Labels vs Contexts](https:/
    ```xml
       <changeSet id="2" author="bob" context="!test or prod"/>
    ```
-### <a name="databasesupport"></a>Liquibase Tagging
+### <a name="tagging"></a>Liquibase Tagging
 Liquibase allows tagging of the database so identify a particular state of the database
 
 ```shell
 mvn liquibase:rollback -Dliquibase.rollbackTag=1.0
 ```
-### <a name="databasesupport"></a>Liquibase Rollbacks
+### <a name="rollback"></a>Liquibase Rollbacks
 The database can be manually rolled back to a point in time if desired using liquibase.  Specifically, rolled back to a certain changeset
 
 ```shell
@@ -356,6 +360,13 @@ The database can be manually rolled back to a point in time if desired using liq
 ```
 
 ### <a name="changelog"></a>Liquibase Generating Change Logs (Exporting)
+Liquibase provides the ability to generate a changelog against an existing database, however note the below limitations:
+* Stored procedures
+* Functions
+* Packages
+* Triggers
+
+Example commandline usage:
 ```shell
     liquibase --driver=oracle.jdbc.OracleDriver \
         --classpath=\path\to\classes:jdbcdriver.jar \
