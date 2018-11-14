@@ -298,7 +298,7 @@ Example and how it's used:
 ```
 
 * <a name="context"></a>Contexts - allow you to set a context in which the changeset should run, for instance they can reflect environments, so you could target a changeset to only run locally or in a managed environment
-    * They also allow you to specify logic on the changeset to trigger whether they should be executed during runtime
+    * They also allow you to specify logic on the changeset that will trigger during runtime
 
 ```xml
     <changeSet id="2" author="bob" context="test">
@@ -318,14 +318,25 @@ In liquibase
 
 During runtime
 ```shell
+   mvn liquibase:update –labels="!test"
 ```
 * <a name="property"></a>Properties - already mentioned above in *Database Agnostic Behavior*
 
 ### <a name="databasesupport"></a>Labels vs Context
-Labels and Context tags seem very similar, however they have different usecases and behave differently at runtime than one might expect.
+Labels and Context tags seem very similar, however they have different usecases and behave differently at runtime than one might expect. The question comes down to who needs the control for the logic, the changeset author or the changeset executor. It is important to note the difference before using either!  It would be advisable to avoid Labels unless explicitly required for the liquibase executor to control the logic.
 
-* Labels
-* Contexts
+Refer to the original liquibase article on the two: [Labels vs Contexts](https://www.liquibase.org/2014/11/contexts-vs-labels.html)
+
+* Labels - the logic should be applied at runtime by the command excuting liquibase and NOT in the actual liquibase tag itself
+   * The below code will NOT work as expected as the logic should not exist in the tag
+   ```xml
+      <changeSet id="2" author="bob" label="!test"/>
+   ```
+* Contexts - the logic should be added to the actual liquibase tag itself and requires no custom logic to be applied to the command to run liquibase
+   * The below example shows how to use this logic
+   ```xml
+      <changeSet id="2" author="bob" context="!test or prod"/>
+   ```
 ### <a name="databasesupport"></a>Liquibase Tagging
 Liquibase allows tagging of the database so identify a particular state of the database
 
