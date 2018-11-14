@@ -446,6 +446,7 @@ Then define a spring bean to invoke:
         return liquibase;
     }
 ```
+Refer to the java doc for more information on the SpringLiquibase bean http://www.liquibase.org/javadoc/liquibase/integration/spring/SpringLiquibase.html
 
 ### <a name="sql"></a>Using PLSQL and Raw SQL
 Liquibase supports using raw sql and even plsql.  It is general god practice to avoid a raw SQL statement unless explicitly required to accomplish the task, and in that event it is critical to supply the rollback block mentioned in the *Transaction Commits and Rollbacks* section.
