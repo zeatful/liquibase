@@ -396,9 +396,9 @@ There are three ways to execute liquibase:
 * anytime, using a maven plugin
 * runtime, using Spring
 
-####<a name="jar"></a> Liquibase from the Jar
+#### <a name="jar"></a> Liquibase from the Jar
 
-####<a name="maven"></a> Liquibase through Maven
+#### <a name="maven"></a> Liquibase through Maven
 Liquibase has a maven plugin which allows liquibase commands to be executed through maven goals and commands.
 
 To get started add the following to your pom.xml and update the information to reflect your configuration
