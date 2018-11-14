@@ -24,8 +24,11 @@ The purpose of this document is to create useful, organized documentation on usa
 * [Tagging](#tagging)
 * [Rollbacks](#rollback)
 * [Changelog Generation](#changelog)
-* [Run Liquibase with Maven](#maven)
-* [Run Liquibase with Spring](#spring)
+* [Executing Liquibase](#execute)
+   * [Run Liquibase from the Jar](#jar)
+   * [Run Liquibase with Maven](#maven)
+   * [Run Liquibase with Spring](#spring)
+   
 ## <a name="why"></a>Why Liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
 
