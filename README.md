@@ -24,7 +24,8 @@ The purpose of this document is to create useful, organized documentation on usa
 * [Tagging](#tagging)
 * [Rollbacks](#rollback)
 * [Changelog Generation](#changelog)
-
+* [Run Liquibase with Maven](#maven)
+* [Run Liquibase with Spring](#spring)
 ## <a name="why"></a>Why Liquibase?
 Liquibase operates as an open-source library with tooling to easily orchestrate database structure changes and data migrations in a trackable, consistent and repeatable way.  This allows developers to easily make and deliver database updates as well as migrate existing data to all environments.  Liquibase is database agnostic which allows changes to be migrated across different database types, IE: Oracle, Mysql, H2.
 
@@ -389,7 +390,15 @@ Example commandline usage:
         generateChangeLog
 ```
 
-###<a name="maven"></a> Liquibase through Maven
+### <a name="execute"></a> Executing Liquibase
+There are three ways to execute liquibase:
+* anytime, directly from the jar
+* anytime, using a maven plugin
+* runtime, using Spring
+
+####<a name="jar"></a> Liquibase from the Jar
+
+####<a name="maven"></a> Liquibase through Maven
 Liquibase has a maven plugin which allows liquibase commands to be executed through maven goals and commands.
 
 To get started add the following to your pom.xml and update the information to reflect your configuration
@@ -423,7 +432,7 @@ Example usage to execute liquibase:
 
 The above command can be used to deploy database changes at runtime without any need to restart the application as long as the changes aren't application breaking changes, IE: remove a table referenced or used by Hibernate.
 
-### <a name="spring"></a>Liquibase through Spring
+#### <a name="spring"></a>Liquibase through Spring
 A liquibase spring bean can also be used to automatically run liquibase at application start thus automating the entire process once an artifact is built and deployed.  This is great for migration to managed environments since it requires no extra steps during the build or deploy.  The liquibase spring bean is also auto configured by spring-boot and will run as long as the bean is defined in the spring project.
 
 To get started simply add liquibase to your dependencies in your pom.xml:
